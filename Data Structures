@@ -1,1 +1,185 @@
 
+#include "Node.h"
+#include <iostream>
+using namespace std;
+//Modify using Templates
+template <typename T>
+class linkedList {
+private:
+    Node<T>* Head;
+public:
+    linkedList()
+    {
+        Head= nullptr;
+    }
+    void Traverse()
+    {
+        Node<T>* Temp=Head;
+        while (Temp->getNext() != nullptr)
+        {
+            cout<<Temp->getData()<<" -> ";
+            Temp=Temp->getNext();
+        }
+        cout<<Temp->getData();
+    }
+    bool search(T Target)
+    {
+        Node<T>* Temp=Head;
+        while (Temp->getData() != Target)
+        {
+            Temp=Temp->getNext();
+        }
+        //Temp== nullptr? cout<<"Not Existed":cout<<"Item is existed";
+        return Temp != nullptr;
+    }
+    void insertBegin(T item)
+    {
+        Node<T>* newNode= new Node(item);
+        if(isEmpty())
+        {
+            Head = newNode;
+        }
+        else
+        {
+            newNode->setNext(Head);
+            Head=newNode;
+        }
+
+    }
+    void insertEnd(T item)
+    {
+        Node<T>* newNode= new Node(item);
+        Node<T>* Temp=Head;
+        while(Temp->getNext() != nullptr)
+        {
+            Temp=Temp->getNext();
+        }
+        Temp->setNext(newNode);
+
+    }
+   /* bool insertAt(T item,T node )
+    {
+        Node<T> newNode= new Node(item);
+        Node<T>* Temp=Head;
+        while(Temp->getData() != node)
+        {
+            Temp=Temp->getNext();
+        }
+        Temp->setNext(newNode);
+    }*/
+    void Delete(T Target)
+    {
+     if(isEmpty())
+     {
+         cout<<"There is no item to be deleted";
+     }
+     else {
+         if (Head->getData() == Target) {
+             Node<T> *delPtr = Head;
+             Head = Head->getNext();
+             delete delPtr;
+         } else {
+             Node<T> *Temp = Head;
+             Node<T> *delPtr = Temp->getNext();
+             while (delPtr->getData() != Target and delPtr != nullptr) {
+                 Temp = Temp->getNext();
+                 delPtr=delPtr->getNext();
+             }
+             Temp->setNext(delPtr->getNext());
+             delete delPtr;
+         }
+     }
+     /*if (Head->getData() == Target) {
+             Node<T> *delPtr = Head;
+             Head = Head->getNext();
+             delete delPtr;
+         } else {
+             Node<T> *Temp = Head;
+             while (Temp->getNext()->getData() != Target and Temp != nullptr) {
+                 Temp = Temp->getNext();
+             }
+             Temp->setNext(Temp->getNext()->getNext());
+             Node<T> *delPtr = Temp->getNext();
+             delete delPtr;
+         }*/
+    }
+    void Modify(T Old,T New)
+    {
+        Node<T>* Temp=Head;
+        while(Temp->getData() != Old)
+        {
+            Temp=Temp->getNext();
+        }
+        Temp->setData(New);
+    }
+    void deleteAll()
+    {
+        Node<T>* Temp;
+       while(Head != nullptr)
+       {
+
+           Temp=Head;
+          delete Temp;
+        Head=Head->getNext();
+       }
+       //delete Head;
+       cout<<"ALL items are deleted";
+    }
+    bool isEmpty()
+    {
+        return (Head== nullptr);
+    }
+    void DeleteLast() {
+        Node<T> *Temp = Head;
+        while (Temp->getNext()->getNext() != nullptr) {
+            Temp = Temp->getNext();
+        }
+        Node<T>* delptr=Temp->getNext();
+        Temp->setNext(nullptr);
+        delete delptr;
+
+    }
+    void Merge(linkedList<T> secondLL);
+    void Reverse()
+    {
+        Node<T>* Previous= nullptr;
+        Node<T>* current=Head;
+        Node<T>* TempPtr;
+
+        while(current->getNext()!= nullptr)
+        {
+            TempPtr=current->getNext();
+            current->setNext(Previous);
+            Previous=current;
+            current=TempPtr;
+        }
+        Head=current;
+        Head->setNext(Previous);
+    }
+    void insertBefore(T item, T newValue)
+    {
+        if(search(item))
+        {
+            if(Head->getData()==item)
+            {
+                insertBegin(newValue);
+            }
+            else {
+                Node<T> *newNode = new Node(newValue);
+                Node<T> *Temp = Head;
+                while (Temp->getNext()->getData() != item and Temp != nullptr) {
+                    Temp = Temp->getNext();
+                }
+                    newNode->setNext(Temp->getNext());
+                    Temp->setNext(newNode);
+                    //cout<<"insertion is done";
+                }
+        }
+        else
+        {
+            cout<<"The value does not exit \n Please enter valid values";
+        }
+
+    }
+
+};
